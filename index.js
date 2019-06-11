@@ -407,8 +407,7 @@ module.exports = function PacketsLogger(mod) {
 			return true
 		}
 
-		let protocolVersion = mod.protocolVersion
-		let data2 = mod.dispatch.protocol.write(protocolVersion, name, '*', packet)
+		let data2 = mod.dispatch.toRaw(name, '*', packet)
 		if ((data.length != data2.length) || !data.equals(data2)) {
 			return true
 		} else {
@@ -501,7 +500,6 @@ module.exports = function PacketsLogger(mod) {
 		}, (code, data, incoming, fake) => {
 			if (!logC && !logS) return
 
-			let protocolVersion = mod.protocolVersion
 			let name = null
 			let packet = null
 
@@ -510,7 +508,7 @@ module.exports = function PacketsLogger(mod) {
 
 			if (name) {
 				try {
-					packet = mod.dispatch.protocol.parse(protocolVersion, code, '*', data)
+					packet = mod.dispatch.fromRaw(code, '*', data)
 				} catch (e) {
 					packet = null
 				}
